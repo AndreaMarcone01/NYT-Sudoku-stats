@@ -1,4 +1,6 @@
+import os
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 # function to turn the string in format mm:ss to a integer of seconds
@@ -35,3 +37,18 @@ test = sec_to_string(np.array([61, 132]))
 print(test)
 test2 = string_to_sec(test)
 print(test2)
+
+# import the data
+main_dir = os.path.dirname(os.path.realpath(__file__)) # directory of the file
+data = pd.read_csv(main_dir+"\\times.txt")
+print(data)
+print(data.iloc[5])
+easy = data.iloc[1]
+medium = data.iloc[3]
+hard = data.iloc[5]
+
+t_easy = easy.iloc[0]
+t_medium = medium.iloc[0]
+t_hard = hard.iloc[0]
+
+print(t_easy[0])
