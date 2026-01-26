@@ -33,22 +33,19 @@ def sec_to_string(sec):
 
     return string
 
-test = sec_to_string(np.array([61, 132]))
-print(test)
-test2 = string_to_sec(test)
-print(test2)
 
 # import the data
 main_dir = os.path.dirname(os.path.realpath(__file__)) # directory of the file
-data = pd.read_csv(main_dir+"\\times.txt")
-print(data)
-print(data.iloc[5])
-easy = data.iloc[1]
-medium = data.iloc[3]
-hard = data.iloc[5]
+data = pd.read_csv(main_dir+"\\times.txt", sep = '|', skiprows = [1,3,5]) # import as panda dataframe, skiprows header and difficulty comments 
 
-t_easy = easy.iloc[0]
-t_medium = medium.iloc[0]
-t_hard = hard.iloc[0]
+# separe the 3 difficulties
+easy = data.iloc[0]
+medium = data.iloc[1]
+hard = data.iloc[2]
 
-print(t_easy[0])
+# from row of dataframe to array in which every time is an element 
+t_e = easy.str.split(',').iloc[0]
+t_m = medium.str.split(',').iloc[0]
+t_h = hard.str.split(',').iloc[0]
+
+# let's start the analysis
