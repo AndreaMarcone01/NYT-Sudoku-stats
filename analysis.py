@@ -66,6 +66,7 @@ def mean_and_std_series(tt_sec):
 test = string_to_sec(t_e)
 means, stds = mean_and_std_series(test)
 print(test)
+print(np.mean(test))
 print(means)
 print(stds)
 
