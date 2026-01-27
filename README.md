@@ -19,5 +19,5 @@ At the start of the file we find two fundamentals functions: `string_to_sec` to 
 Then we import the data from the `times.txt` file, the code and the comments should be self explanatory. At the end of import we have arrays with the three difficulties times. 
 
 ### Analysis: graph with evolution of mean and standard deviation
-I wanted to see how my times impacted on the mean ($\mu$) and standard deviation ($\sigma$) and the evolution of these quantities with the grow of plays. 
-To achieve this we use the `mean_and_std_series` function: given the array of seconds this finds $\mu$ and $\sigma$ after each new time. 
+I wanted to see how my times impacted on the mean ($m$) and standard deviation ($s$) and the evolution of these quantities with the grow of plays. 
+To achieve this we use the `mean_and_std_series` function: given the array of seconds this finds $m$ and $s$ after each new time. 
