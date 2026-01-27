@@ -49,3 +49,32 @@ t_m = medium.str.split(',').iloc[0]
 t_h = hard.str.split(',').iloc[0]
 
 # let's start the analysis
+# define a function that given the array of seconds finds the mean and std and their evolution
+def mean_and_std_series(tt_sec):
+    length = len(tt_sec)
+    # initialize vectors
+    mean_series = np.zeros(length)
+    std_series = np.zeros(length)
+
+    mean_series[0] = tt_sec[0]
+    for ii in range(1,length):
+        mean_series[ii] = np.mean(tt_sec[:ii+1])
+        std_series[ii] = np.std(tt_sec[:ii+1])
+
+    return mean_series, std_series
+
+test = string_to_sec(t_e)
+means, stds = mean_and_std_series(test)
+print(test)
+print(means)
+print(stds)
+
+numbers = np.arange(1, len(test)+1, 1)
+plt.plot(numbers, test, '.', label = 'Times of plays')
+plt.plot(numbers, means, label = 'Means')
+plt.plot(numbers, means+stds, '--', label = 'Means+std')
+plt.plot(numbers, means-stds, '--', label = 'Means-std')
+plt.xlabel('Number of plays')
+plt.ylabel('Time [s]')
+plt.legend()
+plt.show()
