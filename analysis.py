@@ -70,7 +70,7 @@ numbers = np.arange(1, len(test)+1, 1)
 # Graph the data: mean and 1 sigma interval, times colored based on how good is the time in respect of mean
 plt.plot(numbers, means, label = 'Mean', color = 'darkblue', zorder = 1)
 plt.fill_between(numbers, means-stds, means+stds, color = 'royalblue', alpha = 0.2, zorder = 1)
-plt.scatter(numbers, test, alpha = 1, c=test-means, marker = 'o', label = 'Times of plays', cmap='RdYlGn_r', edgecolors = 'black', zorder = 2)
+plt.scatter(numbers, test, alpha = 1, c=test-means, marker = 'o', label = 'Game time', cmap='RdYlGn_r', edgecolors = 'black', zorder = 2)
 
 # better x axis
 plt.xlabel('Games played')
