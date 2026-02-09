@@ -18,18 +18,29 @@ def string_to_sec(string):
 # Inverse function to turn the integrer of seconds to a string in format mm:ss
 def sec_to_string(sec):
     # initialize string
-    string = np.zeros(len(sec), dtype='<U5')
+    string = np.zeros(sec.size, dtype='<U5')
     # find minute and seconds
     mm = np.floor(sec/60).astype(int)
     ss = (sec - mm*60).astype(int)
-
+    
     # combine minute and seconds in string
-    for ii in range(len(string)):
-        # add leading zero if needed
-        if ss[ii] < 10:
-            string[ii] = f"{mm[ii]}:0{ss[ii]}"
-        else:
-            string[ii] = f"{mm[ii]}:{ss[ii]}"
+    # if we are working with a single number
+    if string.size == 1:
+        for ii in range(string.size):
+            # add leading zero if needed
+            if ss < 10:
+                string = f"{mm}:0{ss}"
+            else:
+                string = f"{mm}:{ss}"
+                
+    # if we are working with an array
+    else:
+        for ii in range(string.size):
+            # add leading zero if needed
+            if ss[ii] < 10:
+                string[ii] = f"{mm[ii]}:0{ss[ii]}"
+            else:
+                string[ii] = f"{mm[ii]}:{ss[ii]}"
 
     return string
 
@@ -63,7 +74,19 @@ def mean_and_std_series(tt_sec):
 
     return mean_series, std_series
 
-test = string_to_sec(t_e)
+def best_interval(tt_sec):
+    possible_intervals = np.arange(15, np.max(tt_sec), 15, dtype = int)
+    interval = (np.max(tt_sec) - np.min(tt_sec))/8 # we want 8 dashed lines in graph
+    bool_array = np.abs(possible_intervals/interval -1) == np.min(np.abs(possible_intervals/interval -1)) # find best which of possible intervals are nearest to have 8 lines in graph 
+    best = possible_intervals[bool_array].item()
+    min = np.floor(np.min(tt_sec)/best) * best # min in best sec interval
+    max = np.floor(np.max(tt_sec)/best + 1) * best # max in best sec interval
+    ticks = np.arange(min, max+1, best)
+    return min, max, ticks
+
+
+
+test = string_to_sec(t_m)
 means, stds = mean_and_std_series(test)
 numbers = np.arange(1, len(test)+1, 1)
 
@@ -80,14 +103,35 @@ plt.xticks(x_ticks, labels = x_ticks)
 
 # better y axis
 plt.ylabel('Time')
-y_min = np.floor(np.min(test)/30) * 30 # min in 30 sec interval
-y_max = np.floor(np.max(test)/30 + 1) * 30 # max in 30 sec interval
+y_min, y_max, y_ticks = best_interval(test)
 plt.ylim([y_min-5, y_max+5])
-y_ticks = np.arange(y_min, y_max+1, 30)
 plt.yticks(y_ticks, labels = sec_to_string(y_ticks))
 
 # grid, legend and save
 plt.grid(linestyle='--', zorder = 0)
 plt.legend()
 plt.savefig(main_dir+"\\example_graph.pdf")
+plt.close()
+
+
+# work on the histogram 
+
+# work on the text box
+test = string_to_sec(t_e)
+means, stds = mean_and_std_series(test)
+numbers = np.arange(1, len(test)+1, 1)
+
+diff_string = "NYT Sudoku analysis: Easy"
+number_string = "You played "+str(len(test))+" games"
+mean_string = "Mean time \n"+sec_to_string(means[-1])+"$\\pm$"+sec_to_string(stds[-1])
+best_string = "Best time is "+sec_to_string(np.min(test))+"  (game number "+str(numbers[test == np.min(test)].item())+")"
+worst_string = "Worst time is "+sec_to_string(np.max(test))+"  (game number "+str(numbers[test == np.max(test)].item())+")"
+plt.text(0.5,0.75,s = diff_string, horizontalalignment = 'center')
+plt.text(0.5,0.65,s = number_string, horizontalalignment = 'center')
+plt.text(0.5,0.5,s = mean_string, horizontalalignment = 'center', linespacing = 1.5)
+plt.text(0.5,0.4,s = best_string, horizontalalignment = 'center', linespacing = 1.5)
+plt.text(0.5,0.3,s = worst_string, horizontalalignment = 'center', linespacing = 1.5)
 plt.show()
+plt.close()
+
+# then we have to combine them in a single file
