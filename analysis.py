@@ -111,7 +111,7 @@ def analysis_plot(tt_string, diff_string):
     ax2 = plt.subplot2grid(shape=shape, loc=(0,2), colspan = 3)
 
     x_min, x_max, bins = best_interval(tt_sec, 16)
-    ax2.hist(tt_sec, bins=bins, color = 'royalblue', rwidth=0.95)
+    ax2.hist(tt_sec, bins=bins, color = 'royalblue', rwidth=0.9)
     # better x axis
     ax2.set_xlabel('Game time')
     ax2.set_xlim([x_min-5, x_max+5])
@@ -140,7 +140,6 @@ def analysis_plot(tt_string, diff_string):
     ax3.legend()
 
     plt.tight_layout()
-    print(main_dir+"\\"+diff_string+"_analysis.pdf")
     plt.savefig(main_dir+"\\"+diff_string+"_analysis.pdf")
     print(diff_string+": analysis completed!")
 
