@@ -1,8 +1,11 @@
 # NYT-Sudoku-stats
-Repository for stats of the NYT Sudoku that I started playing in 2026. 
+Repository for stats of the NYT Sudoku that I started playing in 2026. This is just a little side project but if you have some request try open an issue and I will try to respond :)
 
 ## Scope
 I want to have a good analysis of my games, like how many games, the average time for completing the puzzle, an histogram of my times and the evolution of my average time with more plays. 
+
+## How to use
+Download the last release of the repository, then rewrite the `times.txt` file with yours games times. Then you can run `analysis.py` from your preferred python editor or from the terminal. It's necessary python with the packages: `os`, `numpy`, `pandas` and `matplotlib`. 
 
 ## Contents
 In the repository we found different files, this is a brief description of them. 
