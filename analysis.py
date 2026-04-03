@@ -3,11 +3,19 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Function to turn the string in format mm:ss to a integer of seconds
+
 def string_to_sec(string):
+    """Function to turn a string in format mm:ss to a integer of seconds.
+    
+    Args:
+        string (array): array in format mm:ss
+        
+    Returns:
+        sec (array): array of integer of corresponding seconds
+    """
+    
     # initialize sec
     sec = np.zeros(len(string), dtype = int)
-
     # split the string, transform to inter and multiply to have seconds
     for ii in range(len(sec)):
         mm, ss = string[ii].split(':')
@@ -15,8 +23,16 @@ def string_to_sec(string):
     
     return sec
 
-# Inverse function to turn the integrer of seconds to a string in format mm:ss
 def sec_to_string(sec):
+    """Function to turn an integer of seconds to a string in format mm:ss.
+    
+    Args:
+        sec (array): array of integer of seconds
+        
+    Returns:
+        string (array): corresponding array in format mm:ss
+    """
+    
     # initialize string
     string = np.zeros(sec.size, dtype='<U5')
     # find minute and seconds
@@ -49,7 +65,7 @@ def sec_to_string(sec):
 main_dir = os.path.dirname(os.path.realpath(__file__)) # directory of the file
 data = pd.read_csv(main_dir+"\\times.txt", sep = '|', skiprows = [1,3,5]) # import as panda dataframe, skiprows header and difficulty comments 
 
-# separe the 3 difficulties
+# distingue the 3 difficulties
 easy = data.iloc[0]
 medium = data.iloc[1]
 hard = data.iloc[2]
@@ -60,8 +76,17 @@ t_m = medium.str.split(',').iloc[0]
 t_h = hard.str.split(',').iloc[0]
 
 # Let's start the analysis
-# Define a function that given the array of seconds finds the mean and std and their evolution
 def mean_and_std_series(tt_sec):
+    """Function that finds the series of mean and std given an array of seconds.
+    
+    Args:
+        tt_sec (array): array of integers of seconds
+        
+    Returns:
+        tuple:
+            - mean_series (array): evolution of the mean
+            - std_series (array): evolution of the std
+    """
     length = len(tt_sec)
     # initialize vectors
     mean_series = np.zeros(length)
@@ -75,16 +100,38 @@ def mean_and_std_series(tt_sec):
     return mean_series, std_series
 
 def best_interval(tt_sec, n_int):
+    """Function that finds the best interval to represent data.
+    
+    Args:
+        tt_sec (array): array of integers of seconds
+        n_int (int): number of sections in which divide the data
+        
+    Returns:
+        tuple:
+            - min (int): minimum of the range
+            - max (int): maximum of the range
+            - ticks (array): numpy arange from min to max with n_int steps
+    """
+    # start by define the possible intervals we could have
     possible_intervals = np.arange(15, np.max(tt_sec), 15, dtype = int)
-    interval = (np.max(tt_sec) - np.min(tt_sec))/n_int # we want 8 dashed lines in graph
-    bool_array = np.abs(possible_intervals/interval -1) == np.min(np.abs(possible_intervals/interval -1)) # find best which of possible intervals are nearest to have 8 lines in graph 
+    interval = (np.max(tt_sec) - np.min(tt_sec))/n_int                                                      # finds the interval based on n_int
+    bool_array = np.abs(possible_intervals/interval -1) == np.min(np.abs(possible_intervals/interval -1))   # finds closest interval to ideal between the possible intervals 
     best = possible_intervals[bool_array].item()
-    min = np.floor(np.min(tt_sec)/best) * best # min in best sec interval
-    max = np.floor(np.max(tt_sec)/best + 1) * best # max in best sec interval
+    min = np.floor(np.min(tt_sec)/best) * best                                  # min in best sec interval
+    max = np.floor(np.max(tt_sec)/best + 1) * best                              # max in best sec interval
     ticks = np.arange(min, max+1, best)
     return min, max, ticks
 
 def analysis_plot(tt_string, diff_string):
+    """Function that analyse the times.
+    
+    Args:
+        tt_string (array): array of play time in mm:ss format
+        diff_string (string): difficulty that we are analyzing
+        
+    Returns:
+        saves the final plot.
+    """
     tt_sec = string_to_sec(tt_string)
     means, stds = mean_and_std_series(tt_sec)
     numbers = np.arange(1, len(tt_sec)+1, 1)
@@ -128,7 +175,7 @@ def analysis_plot(tt_string, diff_string):
     # better x axis
     ax3.set_xlabel('Games played')
     ax3.set_xlim([0.75, np.max(numbers)+0.25])
-    x_ticks = np.arange(1, len(tt_sec)+1, 2) # tick from 1 every 2 play 
+    x_ticks = np.arange(1, len(tt_sec)+1, 10) # tick from 1 every 10 play 
     ax3.set_xticks(x_ticks, labels = x_ticks)
     # better y axis
     ax3.set_ylabel('Time')
